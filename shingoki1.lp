@@ -1,0 +1,21 @@
+size(11).
+number((0,10), -4).
+number((1,1), 2).
+number((1,5), -2).
+number((1,6), 7).
+number((1,8), -4).
+number((1,10), -2).
+number((2,1), -3).
+number((4,2), 4).
+number((4,9), -2).
+number((5,0), 5).
+number((5,1), -4).
+number((5,3), 9).
+number((5,5), 6).
+number((6,7), -3).
+number((7,9), -5).
+number((8,5), -7).
+number((8,7), -4).
+number((9,10), -6).
+number((10,3), 3).
+number((10,7), -3).

@@ -25,6 +25,16 @@ seg(P,P') :- segmento(P, P'), P<P'.
 % Indica que los numeros que no son 0 se estan utilizando
 :- number(P,N), N!=0, not usado(P).
 
+% Dos puntos estan conectados si estan unidos a traves de un segmento
+conectado(P, P') :- segmento(P, P').%----------------------------------------------
+conectado(P, P') :- segmento(P, P'), conectado(P', P'').%--------------------------
+
+% La relacion conectado es simetrica
+conectado(P, P') :- conectado(P', P).%---------------------------------------------
+
+% Restriccion para que todos los puntos esten conectados
+%:- number(P,_), number(P',_), P != P', not conectado(P, P').
+
 % Muestra el tamaño de la matriz
 #show size/1.
 

@@ -45,7 +45,8 @@ blanco(P) :- number(P, N), N > 0.
 negro(P) :- number(P, N), N < 0.
 
 % Restriccion para verificar q mantienen la direccion
-mismo_sentido((X1, Y1), (X2, Y2), (X3, Y3)) :- fila(X1), fila(X2), fila(X3), columna(Y1), columna(Y2), columna(Y3), (X2-X1) = (X3-X2), (Y2-Y1) = (Y3-Y2).
+mismo_sentido((X1, Y1), (X2, Y2), (X3, Y3)) :- fila(X1), fila(X2), fila(X3), columna(Y1), columna(Y2), columna(Y3), X2-X1 = X3-X2, Y2-Y1 = Y3-Y2.
+
 
 % Regla para garantizar q la direccion de entrada y de salida son la misma
 :- blanco(P), segmento(P, P1), segmento(P, P2), P1 != P2, not mismo_sentido(P1, P, P2).
@@ -53,7 +54,86 @@ mismo_sentido((X1, Y1), (X2, Y2), (X3, Y3)) :- fila(X1), fila(X2), fila(X3), col
 % Comprueba si los dos segmentos del punto negro son perpendiculares
 :- negro(P), segmento(P, P1), segmento(P, P2), P1 != P2, mismo_sentido(P1, P, P2).
 
+% Regla para identificar los puntos blancos con números diferentes de 0
+punto_blanco_con_numero(P, N) :- number(P, N), N > 0.
+
+% Regla para identificar los puntos negros con números diferentes de 0
+punto_negro_con_numero(P, N) :- number(P, N), N < 0.
+
+% Regla para indicar la longitud entre dos puntos adyacentes
+longitud_segmento(P, P', 1) :- adyacente(P, P'), segmento(P, P').
+
+
+%     Posiblemente incorrectas
+
+% Restricción para garantizar que la suma de las longitudes de los segmentos sea correcta para todos los puntos blancos con número
+%:- punto_blanco_con_numero(P, N), not suma_longitudes(P, N).
+
+% Restricción para garantizar que la suma de las longitudes de los segmentos sea correcta para todos los puntos negros con número
+%:- punto_negro_con_numero(P, |N|), not suma_longitudes(P, N).
+
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+% Regla para calcular la longitud de un camino entre dos puntos conectados
+%longitud_segmento(P, P', L) :- reach(P, P'), L = 1, adyacente(P, P').
+%longitud_segmento(P, P', L) :- reach(P, P'), L = L1 + 1, adyacente(P, P1), segmento(P, P1), longitud_segmento(P1, P', L1), mismo_sentido(P, P1, P1, P').
+
+% Regla para calcular la suma de las longitudes de los segmentos rectos que salen de un círculo numerado
+%suma_longitudes_rectas(P, N, L) :- punto_blanco_con_numero(P, N), segmento(P, P1), segmento(P, P2), P1 != P2, longitud_segmento(P, P1, L1), longitud_segmento(P, P2, L2), mismo_sentido(P, P1, P, P2), L = L1 + L2.
+
+% Restricción para garantizar que el número en cada círculo blanco sea la suma de las longitudes de los dos segmentos que salen de ese círculo
+%:- punto_blanco_con_numero(P, N), suma_longitudes_rectas(P, N, L), N != L.
+
+% Regla para calcular la longitud de un camino entre dos puntos conectados
+%longitud_camino(P, P', L) :- longitud_segmento(P, P', L).
+%longitud_camino(P, P'', L + L') :- longitud_segmento(P, P'), conectado(P', P''), longitud_camino(P', P'', L'), P != P''.
+
+% Regla para calcular la longitud total de los dos segmentos que salen de un círculo
+%suma_longitudes(P, N, L1 + L2) :- punto_blanco_con_numero(P, N), segmento(P, P1), segmento(P, P2), P1 != P2, longitud_camino(P, P1, L1), longitud_camino(P, P2, L2).
+
+% Restricción para garantizar que el número en cada círculo blanco sea la suma de las longitudes de los dos segmentos que salen de ese círculo
+%:- punto_blanco_con_numero(P, N), suma_longitudes(P, N, L), N != L.
+
+
+
+% suma_misma_direccion(P, Sum) :- punto_blanco_con_numero(P, N), N > 0, Sum = #sum { 1 : segmento(P, P'), segmento(P, P''), P' != P'', mismo_sentido(P', P, P'') }.
+% Suma recursiva
+%longitud_segmento(P, P'', L) :- segmento(P, P'), adyacente(P, P'), longitud_segmento(P', P'', L1), L = L1 + 1, adyacente(P', P''), mismo_sentido(P, P', P''), not segmento(P, P'').
+%longitud(P, L) :- punto_blanco_con_numero(P, N), longitud_segmento(P, _, L).
+%suma_longitudes(P, Total) :- punto_blanco_con_numero(P, _), Total = #sum{ L : longitud(P, L) }.
+
+%suma_longitudes(P, Total) :- punto_blanco_con_numero(P, _), Total = #sum{ L, P': longitud(P, P', L) }.
+%longitud(P, P', L) :- longitud_segmento(P, P', L).
+
+% Función auxiliar para contar la longitud de un segmento
+%longitud_segmento(P, P', L) :- reach(P, P'), L = 1, adyacente(P, P').
+%longitud_segmento(P, P', L) :- reach(P, P'), L = L1 + 1, adyacente(P, P1), longitud_segmento(P1, P', L1).
+
+% Función auxiliar para contar la longitud de un segmento en un solo sentido
+%longitud_segmento_unidireccional(P, P', L) :- segmento(P, P'), L = 1.
+%longitud_segmento_unidireccional(P, P', L) :- segmento(P, P1), longitud_segmento_unidireccional(P1, P', L1), L = L1 + 1, P != P'.
+
+% Función auxiliar para contar la longitud de un segmento en ambos sentidos
+%longitud_segmento(P, P', L) :- longitud_segmento_unidireccional(P, P', L).
+%longitud_segmento(P, P', L) :- longitud_segmento_unidireccional(P', P, L).
+
+% Regla para verificar si la suma de las longitudes de los dos segmentos que salen de un punto blanco es igual al número dentro del punto
+%suma_longitudes_correcta(P, N) :- punto_blanco_con_numero(P, N), segmento(P, P1), segmento(P, P2),
+%  P1 != P2, longitud_segmento(P, P1, L1), longitud_segmento(P, P2, L2), N = L1 + L2.
+
+% Verificar si la suma de las longitudes de los segmentos que salen de un punto blanco con número es igual al número en ese punto
+%:- punto_blanco_con_numero(P, N), #sum{L, P': longitud_segmento(P, P', L)} != N.
+
+% Verificar si la suma de las longitudes de los segmentos que salen de un punto negro con número es igual al número en ese punto (considerando el valor positivo de N)
+%:- punto_negro_con_numero(P, M), #sum{L, P': longitud_segmento(P, P', L)} != M.
+
+
+%mismo_sentido((X1, Y1), (X2, Y2), (X3, Y3)) :- fila(X1), fila(X2), fila(X3), columna(Y1), columna(Y2), columna(Y3), (X2-X1) = (X3-X2), (Y2-Y1) = (Y3-Y2).
+%mismo_sentido((X1, Y1), (X2, Y2), (X3, Y3)) :- fila(X1), fila(X2), fila(X3), columna(Y1), columna(Y2), columna(Y3), DX1 = X2-X1, DX2 = X3-X2, DX1 = DX2, Y1 = Y2, Y2 = Y3.
+%mismo_sentido((X1, Y1), (X2, Y2), (X3, Y3)) :- fila(X1), fila(X2), fila(X3), columna(Y1), columna(Y2), columna(Y3), DY1 = Y2-Y1, DY2 = Y3-Y2, DY1 = DY2, X1 = X2, X2 = X3.
 
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

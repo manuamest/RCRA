@@ -38,11 +38,11 @@ def print_solution(hlines, vlines, size):
             elif i % 2 == 1 and j % 2 == 0 and (i // 2,j // 2) in vlines:
                 row += "|"
             elif i % 2 == 0 and j % 2 == 1 and (i // 2,j // 2) in hlines:
-                row += "--"
+                row += "---"
             elif i % 2 == 1 and j % 2 == 0:
                 row += " "
             else:
-                row += "  "
+                row += "   "
         print(row)
 
 def extract_size(solution):

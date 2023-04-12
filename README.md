@@ -1,5 +1,7 @@
 Autores:
+
     Jose Manuel Amestoy Lopez     manuel.amestoy@udc.es
+    
     Juan Villaverde Rodriguez     juan.villaverde.rodriguez@udc.es
 
 Encoder usage:         python3 encode.py < shingoki1.txt > shingoki1.lp

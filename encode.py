@@ -1,3 +1,6 @@
+# Jose Manuel Amestoy Lopez     manuel.amestoy@udc.es
+# Juan Villaverde Rodriguez     juan.villaverde.rodriguez@udc.es
+
 import sys
 
 def read_matrix(file):
@@ -9,7 +12,7 @@ def read_matrix(file):
     return matrix
 
 def generate_lp(matrix, output_file):
-    size = len(matrix)
+    size = len(matrix[0]) # Calcula el tamaño basado en la cantidad de elementos de la primera fila
     with open(output_file, 'w') as f:
         f.write(f'size({size}).\n')
         for i in range(size):

@@ -1,5 +1,5 @@
-% Jose Manuel Amestoy Lopez     manuel.amestoy@udc.es
-% Juan Villaverde Rodriguez     juan.villaverde.rodriguez@udc.es
+%# TODO: Crear recursividad para aligned
+%#       Optimizar el codigo para que use una variable en lugar de dos siempre que se pueda
 
 
 
@@ -43,6 +43,7 @@ reach(P, P'') :- reach(P, P'), conectado(P', P'').
 
 % Regla que garantiza que todos los puntos usados alcanzan los demas puntos alcanzados
 :- usado(P), usado(P'), P != P', not reach(P, P').
+
 
 % Regla para identificar los colores de los puntos
 blanco(P) :- number(P, N), N > 0.
